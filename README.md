@@ -41,13 +41,10 @@ Arguments:
                                  issues.
   scoresDb                       Path to your scores.db file.
   songsFolderPath                Path to your osu Songs folder.
-  userName                       Your own username as shown in your local
-                                 leaderboards. Use the -u option to process
-                                 extra usernames.
 
 Options:
   -?|-h|--help                   Show help information
-  -u|--user <username>           Extra usernames to process
+  -u|--user <username>           Usernames to process. if unspecified, processes all replays
   -c|--columns <attribute_name>  Extra columns to display from category attribs,
                                  for example 'Tap Rhythm pp'
   -s|--sort <attribute_name>     What column to sort by (defaults to pp of the
@@ -56,9 +53,9 @@ Options:
   -o|--output <file.txt>         Output results to text file.
 ```
 
-#### Sample command to test run for the 3 usernames Sriki, Srikiki and otherUserName, sorting by acc pp, displaying extra attribute "Aim Flow pp":
+#### Sample command to test run for the 3 usernames Sriki, Srikiki, sorting by acc pp, displaying extra attribute "Aim Flow pp":
 
-`dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db"  D:/Games/osu/Songs Sriki -u Srikiki -u otherUserName -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
+`dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db"  D:/Games/osu/Songs -u Srikiki -u Sriki -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
 
 #### If your username contains this character -> - 
 The CLI library cant handle it properly as an argument, so use a placeholder for the username arg and add the `-u` option like that: `-u="-MyUserName-"`
