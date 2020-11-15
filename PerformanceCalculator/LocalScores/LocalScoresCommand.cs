@@ -106,6 +106,7 @@ namespace PerformanceCalculator.LocalScores
                 if (!File.Exists(beatmapPath))
                 {
                     Console.WriteLine("WARNING: Couldn't find map " + beatmapPath);
+                    return;
                 }
 
                 foreach (var replayEntry in replays.Where(replayEntry =>
