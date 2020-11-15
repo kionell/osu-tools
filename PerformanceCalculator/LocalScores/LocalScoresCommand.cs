@@ -78,12 +78,12 @@ namespace PerformanceCalculator.LocalScores
             OsuDb osuDb = OsuDb.Read(OsuDbPath);
             ScoresDb scoresDb = ScoresDb.Read(ScoreDbPath);
 
-            Dictionary<string, string> checkSumToOsuFile =
-                osuDb.Beatmaps.Where(
-                         currentBeatmap => currentBeatmap.BeatmapChecksum != null && currentBeatmap.RankedStatus == SubmissionStatus.Ranked)
-                     .ToDictionary(
-                         currentBeatmap => currentBeatmap.BeatmapChecksum,
-                         currentBeatmap => SongsFolderPath + "/" + currentBeatmap.FolderName + "/" + currentBeatmap.BeatmapFileName);
+            Dictionary<string, string> checkSumToOsuFile = new Dictionary<string, string>();
+
+            foreach (var beatmap in osuDb.Beatmaps.Where(beatmap => beatmap.BeatmapChecksum != null && beatmap.RankedStatus == SubmissionStatus.Ranked))
+            {
+                checkSumToOsuFile.TryAdd(beatmap.BeatmapChecksum, SongsFolderPath + "/" + beatmap.FolderName + "/" + beatmap.BeatmapFileName);
+            }
 
             string[] keys = scoresDb.Beatmaps.Keys.ToArray();
             var allScoresBag = new ConcurrentBag<ReplayPPValues>();
