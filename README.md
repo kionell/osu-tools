@@ -9,6 +9,8 @@ or delta's rework (located [here](https://github.com/HeBuwei/osu))
 - Install `.NetCore v3.1` or higher
 - Unzip the contents of `patch-XXX.zip` in the repository folder depending on the rework used
 - Run `dotnet build` in the `PerformanceCalculator` folder
+- Make a copy your `scores.db` and `osu!.db` files from your osu installation folder if you plan to recalc your local scores.
+Rename your `osu!.db` copy into `osu.db` (the `!` causes issues) 
 - Run the command you want with `dotnet run -- <your command with args here>` from the `PerfomanceCalculator` folder
 
 # Recalc all of your local ranked scores
