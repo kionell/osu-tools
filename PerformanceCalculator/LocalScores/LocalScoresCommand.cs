@@ -47,11 +47,6 @@ namespace PerformanceCalculator.LocalScores
         [Argument(2, Name = "songsFolderPath", Description = "Path to your osu Songs folder.")]
         public string SongsFolderPath { get; }
 
-        [UsedImplicitly]
-        [Required]
-        [Argument(3, Name = "userName", Description = "Your own username as shown in your local leaderboards. Use the -u option to process extra usernames.")]
-        public string UserName { get; }
-
         [Option(CommandOptionType.MultipleValue, Template = "-u|--user <username>", Description = "Extra usernames to process")]
         public string[] ExtraUsernames { get; set; }
 
@@ -67,7 +62,7 @@ namespace PerformanceCalculator.LocalScores
         public override void Execute()
         {
             var currentRuleset = LegacyHelper.GetRulesetFromLegacyID(0);
-            var allowedUsers = new List<string> { UserName };
+            var allowedUsers = new List<string>();
 
             if (ExtraUsernames != null)
             {
@@ -100,7 +95,7 @@ namespace PerformanceCalculator.LocalScores
                 List<ReplayPPValues> replayPPValuesOnThisMap = new List<ReplayPPValues>();
 
                 foreach (var replayEntry in replays.Where(replayEntry =>
-                    replayEntry.GameMode == 0 && allowedUsers.Contains(replayEntry.PlayerName)))
+                    replayEntry.GameMode == 0 && (allowedUsers.Count == 0 || allowedUsers.Contains(replayEntry.PlayerName))))
                 {
                     try
                     {
@@ -223,7 +218,6 @@ namespace PerformanceCalculator.LocalScores
                     new Cell($"{item.CategoryAttribs["Accuracy pp"]:F1}") { Align = Align.Right }
                 };
 
-
                 if (ExtraColumns != null)
                 {
                     cells.AddRange(ExtraColumns.Select(extraColumn => new Cell($"{item.CategoryAttribs[extraColumn]:F1}") { Align = Align.Right }));
@@ -234,7 +228,6 @@ namespace PerformanceCalculator.LocalScores
 
             Console.WriteLine();
             OutputDocument(new Document(
-                new Span($"User:     {UserName}"), "\n",
                 new Span($"Local PP: {(totalLocalPP + bonusPP):F1} (including {bonusPP:F1}pp from playcount)"), "\n",
                 grid
             ));
