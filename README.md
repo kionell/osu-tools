@@ -8,6 +8,8 @@
 or delta's rework (located [here](https://github.com/HeBuwei/osu))
 - Install `.NetCore v3.1` or higher
 - Unzip the contents of `patch-XXX.zip` in the repository folder depending on the rework used
+- Run `dotnet build` in the `PerformanceCalculator` folder
+- Run the command you want with `dotnet run -- <your command with args here>`
 
 # Recalc all of your local ranked scores
 
