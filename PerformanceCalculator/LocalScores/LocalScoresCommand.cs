@@ -94,20 +94,25 @@ namespace PerformanceCalculator.LocalScores
                 List<Replay> replays = replayDictionary[md5];
                 List<ReplayPPValues> replayPPValuesOnThisMap = new List<ReplayPPValues>();
 
+                checkSumToOsuFile.TryGetValue(md5, out var beatmapPath);
+
+                if (beatmapPath == null)
+                {
+                    // Probably an unranked map
+                    // Console.WriteLine("Couldn't find beatmap with hash " + md5);
+                    return;
+                }
+
+                if (!File.Exists(beatmapPath))
+                {
+                    Console.WriteLine("WARNING: Couldn't find map " + beatmapPath);
+                }
+
                 foreach (var replayEntry in replays.Where(replayEntry =>
                     replayEntry.GameMode == 0 && (allowedUsers.Count == 0 || allowedUsers.Contains(replayEntry.PlayerName))))
                 {
                     try
                     {
-                        checkSumToOsuFile.TryGetValue(md5, out var beatmapPath);
-
-                        if (beatmapPath == null)
-                        {
-                            // Probably an unranked map
-                            // Console.WriteLine("Couldn't find beatmap with hash " + md5);
-                            continue;
-                        }
-
                         string beatmapFileName = Path.GetFileName(beatmapPath).Substring(0);
                         string beatmapName = beatmapFileName.Substring(0, beatmapFileName.Length - 4);
 
