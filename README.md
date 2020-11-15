@@ -55,7 +55,7 @@ Options:
   -o|--output <file.txt>         Output results to text file.
 ```
 
-#### Sample command to test run for the 3 usernames Sriki, Srikiki, sorting by acc pp, displaying extra attribute "Aim Flow pp":
+#### Sample command to test run for the 2 usernames Sriki, Srikiki, sorting by acc pp, displaying extra attribute "Aim Flow pp":
 
 `dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db"  D:/Games/osu/Songs -u Srikiki -u Sriki -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
 
