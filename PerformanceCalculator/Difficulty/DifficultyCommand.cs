@@ -93,11 +93,17 @@ namespace PerformanceCalculator.Difficulty
             var ruleset = LegacyHelper.GetRulesetFromLegacyID(Ruleset ?? beatmap.BeatmapInfo.RulesetID);
             var attributes = ruleset.CreateDifficultyCalculator(beatmap).Calculate(getMods(ruleset).ToArray());
 
+            var beatmapName = $"{beatmap.BeatmapInfo.OnlineBeatmapID} - {beatmap.BeatmapInfo}";
+            if (beatmapName.Length > 100)
+            {
+                beatmapName = beatmapName.Substring(0, 100) + "...";
+            }
+
             var result = new Result
             {
                 RulesetId = ruleset.RulesetInfo.ID ?? 0,
-                Beatmap = $"{beatmap.BeatmapInfo.OnlineBeatmapID} - {beatmap.BeatmapInfo}",
-                Stars = attributes.StarRating.ToString("N2")
+                Beatmap = beatmapName,
+                Stars = attributes.StarRating.ToString("N3")
             };
 
             switch (attributes)
@@ -105,11 +111,6 @@ namespace PerformanceCalculator.Difficulty
                 case OsuDifficultyAttributes osu:
                     result.AttributeData = new List<(string, object)>
                     {
-                        ("aim rating", osu.AimStrain.ToString("N2")),
-                        ("speed rating", osu.SpeedStrain.ToString("N2")),
-                        ("max combo", osu.MaxCombo),
-                        ("approach rate", osu.ApproachRate.ToString("N2")),
-                        ("overall difficulty", osu.OverallDifficulty.ToString("N2"))
                     };
 
                     break;

@@ -13,6 +13,10 @@ namespace PerformanceCalculator.Profile
         public double LocalPP;
         public double LivePP;
 
+        public double AimPP;
+        public double TapPP;
+        public double AccPP;
+
         public BeatmapInfo Beatmap;
 
         public string Mods;

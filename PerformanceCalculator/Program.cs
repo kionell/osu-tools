@@ -5,6 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using osu.Framework.Logging;
 using osu.Game.Beatmaps.Formats;
 using PerformanceCalculator.Difficulty;
+using PerformanceCalculator.LocalScores;
 using PerformanceCalculator.Performance;
 using PerformanceCalculator.Profile;
 using PerformanceCalculator.Simulate;
@@ -14,6 +15,7 @@ namespace PerformanceCalculator
     [Command("dotnet PerformanceCalculator.dll")]
     [Subcommand(typeof(DifficultyCommand))]
     [Subcommand(typeof(PerformanceCommand))]
+    [Subcommand(typeof(LocalScoresCommand))]
     [Subcommand(typeof(ProfileCommand))]
     [Subcommand(typeof(SimulateListingCommand))]
     [HelpOption("-?|-h|--help")]

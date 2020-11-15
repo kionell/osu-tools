@@ -268,3 +268,6 @@ __pycache__/
 Staging/
 
 inspectcodereport.xml
+/.idea/
+results/
+PerformanceCalculator/Profile/ProfileCommand.cs

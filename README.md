@@ -1,30 +1,63 @@
-# osu!tools [![Build status](https://ci.appveyor.com/api/projects/status/70owdbhaaepp70u5?svg=true)](https://ci.appveyor.com/project/peppy/osu-tools)  [![CodeFactor](https://www.codefactor.io/repository/github/ppy/osu-tools/badge)](https://www.codefactor.io/repository/github/ppy/osu-tools) [![dev chat](https://discordapp.com/api/guilds/188630481301012481/widget.png?style=shield)](https://discord.gg/ppy)
+# Edited Readme, because I know you are here for the pp rework calc 
 
-Tools for [osu!](https://osu.ppy.sh).
+## Last update: 15/11/2020
 
-# Requirements
+# Setup
+- Either download the source zip of this repo or install `git` and clone it yourself
+- Replace the `osu` folder contents with the **xexxar** rework (located [here](https://github.com/Apollo-P/osu/tree/PP))
+- Install `.NetCore v3.1` or higher
+- Unzip the contents of `patch.zip` in the repository folder
 
-- A desktop platform with the [.NET Core SDK 2.2](https://www.microsoft.com/net/learn/get-started) or higher installed.
-- When working with the codebase, we recommend using an IDE with intellisense and syntax highlighting, such as [Visual Studio 2017+](https://visualstudio.microsoft.com/vs/), [Jetbrains Rider](https://www.jetbrains.com/rider/) or [Visual Studio Code](https://code.visualstudio.com/).
-- These instructions assume you have the the [CLI git client](https://git-scm.com/) installed, but any other GUI client such as GitKraken will suffice.
-- Note that there are **[additional requirements for Windows 7 and Windows 8.1](https://docs.microsoft.com/en-us/dotnet/core/windows-prerequisites?tabs=netcore2x)** which you may need to manually install if your operating system is not up-to-date.
+# Recalc all of your local ranked scores
 
-# Getting Started
+The command will read all of your **LOCAL** replays and use your **LOCAL** beatmaps to recalc all of your scores and give you a new top 500.
 
-- Clone the repository including submodules (`git clone --recurse-submodules https://github.com/ppy/osu-tools`)
-- Navigate to each tool's directory and follow the instructions listed in the tool's README.
-    - [PerformanceCalculator](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md) - A tool for calculating the difficulty of beatmaps and the performance of replays.
+This means that any map you dont have the replays for / any map you dont have on disk will get ignored.
 
-# Contributing
+For the recalc, **pp > Score** *(screw you, scorev1)*
 
-Contributions can be made via pull requests to this repository. We hope to credit and reward larger contributions via a [bounty system](https://www.bountysource.com/teams/ppy). If you're unsure of what you can help with, check out the [list of open issues](https://github.com/ppy/osu-tools/issues).
+To my knowledge, I cannot display the diff with live pp without basically ddosing bancho in the process. For the same reasons, 
+I cannot do a full recalc based on your online scores.
 
-Note that while we already have certain standards in place, nothing is set in stone. If you have an issue with the way code is structured; with any libraries we are using; with any processes involved with contributing, *please* bring it up. I welcome all feedback so we can make contributing to this project as pain-free as possible.
+### **USE -t TO DO A TEST RUN BEFORE RUNNING THE LONG FULL COMMAND**
+*or dont complain if your command fails after 20mins of processing because you entered invalid args*
 
-# Licence
+### **BE SURE TO USE THE COMMAND ON BACKUPS OF YOUR .db FILES**
 
-The osu! client code, framework, and tools are licensed under the [MIT licence](https://opensource.org/licenses/MIT). Please see [the licence file](LICENCE) for more information. [tl;dr](https://tldrlegal.com/license/mit-license) you can do whatever you want as long as you include the original copyright and license notice in any copy of the software/source.
+The command is read only on the databases (obviously) but you can never be too safe.
+Execute it in the `PerformanceCalculator` folder.
 
-Please note that this *does not cover* the usage of the "osu!" or "ppy" branding in any software, resources, advertising or promotion, as this is protected by trademark law.
+```
+> dotnet run -- localscores --help
 
-Please also note that game resources are covered by a separate licence. Please see the [ppy/osu-resources](https://github.com/ppy/osu-resources) repository for clarifications.
+Recalcs all of your local scores
+
+Usage: dotnet PerformanceCalculator.dll localscores [options] <osuDb> <scoresDb> <userName>
+
+Arguments:
+  osuDb                          Path to your osu!.db file. Copy and rename it
+                                 to remove the '!' in the filename if you have
+                                 issues.
+  scoresDb                       Path to your scores.db file.
+  userName                       Your own username as shown in your local
+                                 leaderboards. Use the -u option to process
+                                 extra usernames.
+
+Options:
+  -?|-h|--help                   Show help information
+  -u|--user <username>           Extra usernames to process
+  -c|--columns <attribute_name>  Extra columns to display from category attribs,
+                                 for example 'Tap Rhythm pp'
+  -s|--sort <attribute_name>     What column to sort by (defaults to pp of the
+                                 play)
+  -t|--test-run                  Only run on 20 beatmaps to test your arguments
+  -o|--output <file.txt>         Output results to text file.
+```
+
+#### Sample command to test run for the 3 usernames Sriki, Srikiki and otherUserName, sorting by acc pp, displaying extra attribute "Aim Flow pp":
+
+`dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db" Sriki -u Srikiki -u otherUserName -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
+
+# Run other pp commands
+- Read about the other available commands here [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).
+
