@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Alba.CsConsoleFormat;
 using JetBrains.Annotations;
@@ -145,7 +144,6 @@ namespace PerformanceCalculator.LocalScores
                         // ReSharper disable once PossibleNullReferenceException
                         scoreInfo.Combo = calculator.Attributes.MaxCombo;
                         var pp = calculator.Calculate(categoryAttribs);
-                        // Console.WriteLine(replayEntry.TimePlayed.ToString(CultureInfo.InvariantCulture) + " - " + beatmapName + " - " + getMods(score.ScoreInfo) + $"{pp:F1}" + "pp");
                         replayPPValuesOnThisMap.Add(new ReplayPPValues(pp, categoryAttribs, score.ScoreInfo, beatmapName));
                     }
                     catch (Exception e)
@@ -224,6 +222,7 @@ namespace PerformanceCalculator.LocalScores
                     new Cell($"{item.CategoryAttribs["Total Tap pp"]:F1}") { Align = Align.Right },
                     new Cell($"{item.CategoryAttribs["Accuracy pp"]:F1}") { Align = Align.Right }
                 };
+
 
                 if (ExtraColumns != null)
                 {
