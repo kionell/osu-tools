@@ -34,7 +34,7 @@ To run, execute the command below in the `PerformanceCalculator` folder.
 
 Recalcs all of your local scores
 
-Usage: dotnet run -- localscores [options] <osuDb> <scoresDb> <songsFolderPath> <userName>
+Usage: dotnet run -- localscores [options] <osuDb> <scoresDb> <songsFolderPath>
 
 Arguments:
   osuDb                          Path to your osu!.db file. Copy and rename it
@@ -45,7 +45,8 @@ Arguments:
 
 Options:
   -?|-h|--help                   Show help information
-  -u|--user <username>           Usernames to process. if unspecified, processes all replays
+  -u|--user <username>           Username to process. if unspecified, processes
+                                 all replays
   -c|--columns <attribute_name>  Extra columns to display from category attribs,
                                  for example 'Tap Rhythm pp'
   -s|--sort <attribute_name>     What column to sort by (defaults to pp of the
@@ -54,7 +55,7 @@ Options:
   -o|--output <file.txt>         Output results to text file.
 ```
 
-#### Sample command to test run for the 2 usernames Sriki, Srikiki, sorting by acc pp, displaying extra attribute "Aim Flow pp":
+#### Sample command to test run for the 2 usernames Sriki and Srikiki, sorting by acc pp, displaying extra attribute "Aim Flow pp":
 
 `dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db"  D:/Games/osu/Songs -u Srikiki -u Sriki -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
 
