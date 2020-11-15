@@ -213,10 +213,28 @@ namespace PerformanceCalculator.LocalScores
                     new Cell($"{item.ScoreInfo.Accuracy * 100f:F2}" + " %") { Align = Align.Right },
                     new Cell($"{item.ScoreInfo.Statistics[HitResult.Miss]}") { Align = Align.Right },
                     new Cell($"{item.ScoreInfo.MaxCombo}/{item.ScoreInfo.Combo}") { Align = Align.Right },
-                    new Cell($"{item.CategoryAttribs["Total Aim pp"]:F1}") { Align = Align.Right },
-                    new Cell($"{item.CategoryAttribs["Total Tap pp"]:F1}") { Align = Align.Right },
-                    new Cell($"{item.CategoryAttribs["Accuracy pp"]:F1}") { Align = Align.Right }
                 };
+
+                if (item.CategoryAttribs.TryGetValue("Aim", out _))
+                {
+                    // Delta attributes
+                    cells.AddRange(new List<Cell>()
+                    {
+                        new Cell($"{item.CategoryAttribs["Aim"]:F1}") { Align = Align.Right },
+                        new Cell($"{item.CategoryAttribs["Tap"]:F1}") { Align = Align.Right },
+                        new Cell($"{item.CategoryAttribs["Accuracy"]:F1}") { Align = Align.Right }
+                    });
+                }
+                else
+                {
+                    // Xexxar attributes
+                    cells.AddRange(new List<Cell>()
+                    {
+                        new Cell($"{item.CategoryAttribs["Total Aim pp"]:F1}") { Align = Align.Right },
+                        new Cell($"{item.CategoryAttribs["Total Tap pp"]:F1}") { Align = Align.Right },
+                        new Cell($"{item.CategoryAttribs["Accuracy pp"]:F1}") { Align = Align.Right }
+                    });
+                }
 
                 if (ExtraColumns != null)
                 {
