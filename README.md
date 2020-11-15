@@ -4,10 +4,14 @@
 
 # Setup
 - Either download the source zip of this repo or install `git` and clone it yourself
-- Replace the `osu` folder contents with the **xexxar** rework (located [here](https://github.com/Apollo-P/osu/tree/PP)) 
+- Replace the `osu` folder contents with the xexxar rework (located [here](https://github.com/Apollo-P/osu/tree/PP)) 
 or delta's rework (located [here](https://github.com/HeBuwei/osu))
 - Install `.NetCore v3.1` or higher
 - Unzip the contents of `patch-XXX.zip` in the repository folder depending on the rework used
+- Run `dotnet build` in the `PerformanceCalculator` folder
+- Make a copy your `scores.db` and `osu!.db` files from your osu installation folder if you plan to recalc your local scores.
+Rename your `osu!.db` copy into `osu.db` (the `!` causes issues) 
+- Run the command you want with `dotnet run -- <your command with args here>` from the `PerfomanceCalculator` folder
 
 # Recalc all of your local ranked scores
 
@@ -55,15 +59,15 @@ Options:
   -o|--output <file.txt>         Output results to text file.
 ```
 
-#### Sample command to test run for the 2 usernames Sriki and Srikiki, sorting by acc pp, displaying extra attribute "Aim Flow pp":
+#### Example command to test run on xexxar's rework for the 2 usernames Sriki and Srikiki, sorting by acc pp, displaying extra attribute "Aim Flow pp":
 
 `dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db"  D:/Games/osu/Songs -u Srikiki -u Sriki -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
 
 #### If your username contains this character -> - 
-The CLI library cant handle it properly as an argument, so use a placeholder for the username arg and add the `-u` option like that: `-u="-MyUserName-"`
+Add the `-u` option like that: `-u="-MyUserName-"`
 
 # Run other pp commands
-- Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).
+- Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/Sriki13/osu-tools/blob/master/PerformanceCalculator/README.md).
 
 # Thanks
 - delta and xexxar & others for doing pp reworks
