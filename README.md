@@ -35,7 +35,7 @@ To run, execute the command below in the `PerformanceCalculator` folder.
 
 Recalcs all of your local scores
 
-Usage: dotnet run -- localscores [options] <osuDb> <scoresDb> <songsFolderPath> <userName>
+Usage: dotnet run -- localscores [options] <osuDb> <scoresDb> <songsFolderPath>
 
 Arguments:
   osuDb                          Path to your osu!.db file. Copy and rename it
