@@ -161,6 +161,12 @@ namespace PerformanceCalculator.LocalScores
             Console.WriteLine("Done recalcing replays");
             List<ReplayPPValues> allScores = allScoresBag.ToList();
 
+            if (allScores.Count == 0)
+            {
+                Console.WriteLine("No replays for the current user found!");
+                return;
+            }
+
             allScores.Sort((s1, s2) =>
                 SortColumnName == null
                     ? s2.TotalPP.CompareTo(s1.TotalPP)
