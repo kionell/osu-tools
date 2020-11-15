@@ -65,3 +65,7 @@ The CLI library cant handle it properly as an argument, so use a placeholder for
 # Run other pp commands
 - Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).
 
+# Thanks
+- delta and xexxar & others for doing pp reworks
+- yukinon and Kionell for helping me test it
+
