@@ -12,6 +12,7 @@ using JetBrains.Annotations;
 using McMaster.Extensions.CommandLineUtils;
 using osu.Game.Beatmaps.Legacy;
 using osu.Game.Rulesets;
+using osu.Game.Rulesets.Osu.Difficulty;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Scoring;
 using osu.Shared;
@@ -133,7 +134,9 @@ namespace PerformanceCalculator.LocalScores
                         // Convert + process beatmap
                         var categoryAttribs = new Dictionary<string, double>();
                         // ReSharper disable once PossibleNullReferenceException
-                        var pp = ruleset.CreatePerformanceCalculator(workingBeatmap, score.ScoreInfo).Calculate(categoryAttribs);
+                        OsuPerformanceCalculator calculator = (OsuPerformanceCalculator)ruleset.CreatePerformanceCalculator(workingBeatmap, score.ScoreInfo);
+                        scoreInfo.Combo = calculator.Attributes.MaxCombo;
+                        var pp = calculator.Calculate(categoryAttribs);
                         // Console.WriteLine(replayEntry.TimePlayed.ToString(CultureInfo.InvariantCulture) + " - " + beatmapName + " - " + getMods(score.ScoreInfo) + $"{pp:F1}" + "pp");
                         replayPPValuesOnThisMap.Add(new ReplayPPValues(pp, categoryAttribs, score.ScoreInfo, beatmapName));
                     }
@@ -166,13 +169,14 @@ namespace PerformanceCalculator.LocalScores
             double bonusPP = 416.6667 * (1 - Math.Pow(0.9994, allScores.Count));
 
             Grid grid = new Grid();
-            grid.Columns.Add(createColumns(9 + (ExtraColumns?.Length ?? 0)));
+            grid.Columns.Add(createColumns(10 + (ExtraColumns?.Length ?? 0)));
             grid.Children.Add(
                 new Cell("#") { Align = Align.Center },
                 new Cell("beatmap") { Align = Align.Center },
                 new Cell("mods") { Align = Align.Center },
                 new Cell("local pp") { Align = Align.Center },
                 new Cell("acc") { Align = Align.Center },
+                new Cell("combo") { Align = Align.Center },
                 new Cell("miss") { Align = Align.Center },
                 new Cell("Total Aim pp") { Align = Align.Center },
                 new Cell("Total Tap pp") { Align = Align.Center },
@@ -196,6 +200,7 @@ namespace PerformanceCalculator.LocalScores
                     new Cell(getMods(item.ScoreInfo)) { Align = Align.Right },
                     new Cell($"{item.TotalPP:F1}") { Align = Align.Right },
                     new Cell($"{item.ScoreInfo.Accuracy * 100f:F2}" + " %") { Align = Align.Right },
+                    new Cell($"{item.ScoreInfo.MaxCombo}/{item.ScoreInfo.Combo}") { Align = Align.Right },
                     new Cell($"{item.ScoreInfo.Statistics[HitResult.Miss]}") { Align = Align.Right },
                     new Cell($"{item.CategoryAttribs["Total Aim pp"]:F1}") { Align = Align.Right },
                     new Cell($"{item.CategoryAttribs["Total Tap pp"]:F1}") { Align = Align.Right },
