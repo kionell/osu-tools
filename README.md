@@ -25,7 +25,8 @@ I cannot do a full recalc based on your online scores.
 ### **BE SURE TO USE THE COMMAND ON BACKUPS OF YOUR .db FILES**
 
 The command is read only on the databases (obviously) but you can never be too safe.
-Execute it in the `PerformanceCalculator` folder.
+
+To run, execute the command below in the `PerformanceCalculator` folder.
 
 ```
 > dotnet run -- localscores --help
@@ -59,5 +60,5 @@ Options:
 `dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db" Sriki -u Srikiki -u otherUserName -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
 
 # Run other pp commands
-- Read about the other available commands here [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).
+- Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).
 
