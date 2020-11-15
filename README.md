@@ -4,7 +4,7 @@
 
 # Setup
 - Either download the source zip of this repo or install `git` and clone it yourself
-- Replace the `osu` folder contents with the **xexxar** rework (located [here](https://github.com/Apollo-P/osu/tree/PP)) 
+- Replace the `osu` folder contents with the xexxar rework (located [here](https://github.com/Apollo-P/osu/tree/PP)) 
 or delta's rework (located [here](https://github.com/HeBuwei/osu))
 - Install `.NetCore v3.1` or higher
 - Unzip the contents of `patch-XXX.zip` in the repository folder depending on the rework used
