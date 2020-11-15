@@ -82,7 +82,10 @@ namespace PerformanceCalculator.LocalScores
 
             foreach (var beatmap in osuDb.Beatmaps.Where(beatmap => beatmap.BeatmapChecksum != null && beatmap.RankedStatus == SubmissionStatus.Ranked))
             {
-                checkSumToOsuFile.TryAdd(beatmap.BeatmapChecksum, SongsFolderPath + "/" + beatmap.FolderName + "/" + beatmap.BeatmapFileName);
+                if (!checkSumToOsuFile.TryAdd(beatmap.BeatmapChecksum, SongsFolderPath + "/" + beatmap.FolderName + "/" + beatmap.BeatmapFileName))
+                {
+                    Console.WriteLine("WARNING: beatmap " + beatmap.BeatmapFileName + " found multiple times in osu db");
+                }
             }
 
             string[] keys = scoresDb.Beatmaps.Keys.ToArray();
