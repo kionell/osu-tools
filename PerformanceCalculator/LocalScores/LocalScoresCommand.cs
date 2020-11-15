@@ -176,8 +176,8 @@ namespace PerformanceCalculator.LocalScores
                 new Cell("mods") { Align = Align.Center },
                 new Cell("local pp") { Align = Align.Center },
                 new Cell("acc") { Align = Align.Center },
-                new Cell("combo") { Align = Align.Center },
                 new Cell("miss") { Align = Align.Center },
+                new Cell("combo") { Align = Align.Center },
                 new Cell("Total Aim pp") { Align = Align.Center },
                 new Cell("Total Tap pp") { Align = Align.Center },
                 new Cell("Accuracy pp") { Align = Align.Center }
@@ -200,8 +200,8 @@ namespace PerformanceCalculator.LocalScores
                     new Cell(getMods(item.ScoreInfo)) { Align = Align.Right },
                     new Cell($"{item.TotalPP:F1}") { Align = Align.Right },
                     new Cell($"{item.ScoreInfo.Accuracy * 100f:F2}" + " %") { Align = Align.Right },
-                    new Cell($"{item.ScoreInfo.MaxCombo}/{item.ScoreInfo.Combo}") { Align = Align.Right },
                     new Cell($"{item.ScoreInfo.Statistics[HitResult.Miss]}") { Align = Align.Right },
+                    new Cell($"{item.ScoreInfo.MaxCombo}/{item.ScoreInfo.Combo}") { Align = Align.Right },
                     new Cell($"{item.CategoryAttribs["Total Aim pp"]:F1}") { Align = Align.Right },
                     new Cell($"{item.CategoryAttribs["Total Tap pp"]:F1}") { Align = Align.Right },
                     new Cell($"{item.CategoryAttribs["Accuracy pp"]:F1}") { Align = Align.Right }
