@@ -4,7 +4,7 @@
 
 # Setup
 - Either download the source zip of this repo or install `git` and clone it yourself
-- Replace the `osu` folder contents with the **xexxar** rework (located [here](https://github.com/Apollo-P/osu/tree/PP)) or delta's rework
+- Replace the `osu` folder contents with the **xexxar** rework (located [here](https://github.com/Apollo-P/osu/tree/PP)) or delta's rework (untested)
 - Install `.NetCore v3.1` or higher
 - Unzip the contents of `patch.zip` in the repository folder
 
@@ -33,13 +33,14 @@ To run, execute the command below in the `PerformanceCalculator` folder.
 
 Recalcs all of your local scores
 
-Usage: dotnet PerformanceCalculator.dll localscores [options] <osuDb> <scoresDb> <userName>
+Usage: dotnet run -- localscores [options] <osuDb> <scoresDb> <songsFolderPath> <userName>
 
 Arguments:
   osuDb                          Path to your osu!.db file. Copy and rename it
                                  to remove the '!' in the filename if you have
                                  issues.
   scoresDb                       Path to your scores.db file.
+  songsFolderPath                Path to your osu Songs folder.
   userName                       Your own username as shown in your local
                                  leaderboards. Use the -u option to process
                                  extra usernames.
@@ -58,6 +59,9 @@ Options:
 #### Sample command to test run for the 3 usernames Sriki, Srikiki and otherUserName, sorting by acc pp, displaying extra attribute "Aim Flow pp":
 
 `dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db" Sriki -u Srikiki -u otherUserName -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
+
+#### If your username contains this character -> - 
+The CLI library cant handle it properly as an argument, so use a placeholder for the username arg and add the `-u` option like that: `-u=-MyUserName-`
 
 # Run other pp commands
 - Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).

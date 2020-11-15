@@ -2,11 +2,14 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Alba.CsConsoleFormat;
 using JetBrains.Annotations;
 using McMaster.Extensions.CommandLineUtils;
@@ -41,7 +44,13 @@ namespace PerformanceCalculator.LocalScores
 
         [UsedImplicitly]
         [Required]
-        [Argument(2, Name = "userName", Description = "Your own username as shown in your local leaderboards. Use the -u option to process extra usernames.")]
+        [DirectoryExists]
+        [Argument(2, Name = "songsFolderPath", Description = "Path to your osu Songs folder.")]
+        public string SongsFolderPath { get; }
+
+        [UsedImplicitly]
+        [Required]
+        [Argument(3, Name = "userName", Description = "Your own username as shown in your local leaderboards. Use the -u option to process extra usernames.")]
         public string UserName { get; }
 
         [Option(CommandOptionType.MultipleValue, Template = "-u|--user <username>", Description = "Extra usernames to process")]
@@ -74,25 +83,18 @@ namespace PerformanceCalculator.LocalScores
                          currentBeatmap => currentBeatmap.BeatmapChecksum != null && currentBeatmap.RankedStatus == SubmissionStatus.Ranked)
                      .ToDictionary(
                          currentBeatmap => currentBeatmap.BeatmapChecksum,
-                         currentBeatmap => "D:/Games/osu/Songs/" + currentBeatmap.FolderName + "/" + currentBeatmap.BeatmapFileName);
+                         currentBeatmap => SongsFolderPath + "/" + currentBeatmap.FolderName + "/" + currentBeatmap.BeatmapFileName);
 
             string[] keys = scoresDb.Beatmaps.Keys.ToArray();
-            var allScores = new List<ReplayPPValues>();
-            RulesetInfo rulesetInfo = LegacyHelper.GetRulesetFromLegacyID(0).RulesetInfo;
-            Ruleset ruleset = rulesetInfo.CreateInstance();
+            var allScoresBag = new ConcurrentBag<ReplayPPValues>();
 
-            int beatmapProcessCount = TestRun ? 20 : keys.Length;
+            string[] keysToProcess = TestRun ? keys[..20] : keys;
+            ConcurrentDictionary<string, List<Replay>> replayDictionary = new ConcurrentDictionary<string, List<Replay>>(scoresDb.Beatmaps);
+            Console.WriteLine("Processing " + keysToProcess.Length + " beatmaps (this may take a while!)");
 
-            for (int i = 0; i < beatmapProcessCount; i++)
+            Parallel.ForEach(keysToProcess, md5 =>
             {
-                string md5 = keys[i];
-
-                if (i % 100 == 0)
-                {
-                    Console.WriteLine("Processed " + i + " osu beatmaps out of " + beatmapProcessCount);
-                }
-
-                List<Replay> replays = scoresDb.Beatmaps[md5];
+                List<Replay> replays = replayDictionary[md5];
                 List<ReplayPPValues> replayPPValuesOnThisMap = new List<ReplayPPValues>();
 
                 foreach (var replayEntry in replays.Where(replayEntry =>
@@ -115,6 +117,9 @@ namespace PerformanceCalculator.LocalScores
                         var workingBeatmap = new ProcessorWorkingBeatmap(beatmapPath);
                         var scoreParser = new ProcessorScoreDecoder(workingBeatmap);
 
+                        RulesetInfo rulesetInfo = LegacyHelper.GetRulesetFromLegacyID(0).RulesetInfo;
+                        Ruleset ruleset = rulesetInfo.CreateInstance();
+
                         ScoreInfo scoreInfo = new ScoreInfo
                         {
                             Statistics =
@@ -133,8 +138,8 @@ namespace PerformanceCalculator.LocalScores
 
                         // Convert + process beatmap
                         var categoryAttribs = new Dictionary<string, double>();
-                        // ReSharper disable once PossibleNullReferenceException
                         OsuPerformanceCalculator calculator = (OsuPerformanceCalculator)ruleset.CreatePerformanceCalculator(workingBeatmap, score.ScoreInfo);
+                        // ReSharper disable once PossibleNullReferenceException
                         scoreInfo.Combo = calculator.Attributes.MaxCombo;
                         var pp = calculator.Calculate(categoryAttribs);
                         // Console.WriteLine(replayEntry.TimePlayed.ToString(CultureInfo.InvariantCulture) + " - " + beatmapName + " - " + getMods(score.ScoreInfo) + $"{pp:F1}" + "pp");
@@ -146,11 +151,15 @@ namespace PerformanceCalculator.LocalScores
                     }
                 }
 
-                if (replayPPValuesOnThisMap.Count <= 0) continue;
+                if (replayPPValuesOnThisMap.Count <= 0) return;
 
                 double bestPPOnMap = replayPPValuesOnThisMap.Max(values => values.TotalPP);
-                allScores.Add(replayPPValuesOnThisMap.Find(values => values.TotalPP == bestPPOnMap));
-            }
+                allScoresBag.Add(replayPPValuesOnThisMap.Find(values => values.TotalPP == bestPPOnMap));
+                Console.WriteLine("Done with " + replayPPValuesOnThisMap[0].MapName);
+            });
+
+            Console.WriteLine("Done recalcing replays");
+            List<ReplayPPValues> allScores = allScoresBag.ToList();
 
             allScores.Sort((s1, s2) =>
                 SortColumnName == null
