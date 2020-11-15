@@ -58,7 +58,7 @@ Options:
 
 #### Sample command to test run for the 3 usernames Sriki, Srikiki and otherUserName, sorting by acc pp, displaying extra attribute "Aim Flow pp":
 
-`dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db" Sriki -u Srikiki -u otherUserName -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
+`dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db"  D:/Games/osu/Songs Sriki -u Srikiki -u otherUserName -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
 
 #### If your username contains this character -> - 
 The CLI library cant handle it properly as an argument, so use a placeholder for the username arg and add the `-u` option like that: `-u=-MyUserName-`
