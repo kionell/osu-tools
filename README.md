@@ -46,7 +46,8 @@ Arguments:
 
 Options:
   -?|-h|--help                   Show help information
-  -u|--user <username>           Usernames to process. if unspecified, processes all replays
+  -u|--user <username>           Username to process. if unspecified, processes
+                                 all replays
   -c|--columns <attribute_name>  Extra columns to display from category attribs,
                                  for example 'Tap Rhythm pp'
   -s|--sort <attribute_name>     What column to sort by (defaults to pp of the
