@@ -60,7 +60,7 @@ Options:
 `dotnet run -- localscores "D:/Dev/osu.db" "D:/Dev/scores.db"  D:/Games/osu/Songs -u Srikiki -u Sriki -s "Accuracy pp" -c "Aim Flow pp" -t -o "D:/Dev/osu-tools/localscores.txt"`
 
 #### If your username contains this character -> - 
-The CLI library cant handle it properly as an argument, so use a placeholder for the username arg and add the `-u` option like that: `-u="-MyUserName-"`
+Add the `-u` option like that: `-u="-MyUserName-"`
 
 # Run other pp commands
 - Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).
