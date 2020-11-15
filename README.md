@@ -63,7 +63,7 @@ Options:
 Add the `-u` option like that: `-u="-MyUserName-"`
 
 # Run other pp commands
-- Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/ppy/osu-tools/blob/master/PerformanceCalculator/README.md).
+- Read about the other available commands here: [PerformanceCalculator Readme](https://github.com/Sriki13/osu-tools/blob/master/PerformanceCalculator/README.md).
 
 # Thanks
 - delta and xexxar & others for doing pp reworks
