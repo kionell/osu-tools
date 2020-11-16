@@ -155,8 +155,14 @@ namespace PerformanceCalculator.LocalScores
 
                 if (replayPPValuesOnThisMap.Count <= 0) return;
 
-                double bestPPOnMap = replayPPValuesOnThisMap.Max(values => values.TotalPP);
-                allScoresBag.Add(replayPPValuesOnThisMap.Find(values => values.TotalPP == bestPPOnMap));
+                ReplayPPValues best = null;
+
+                foreach (var replayValues in replayPPValuesOnThisMap.Where(replayValues => best == null || best.TotalPP < replayValues.TotalPP))
+                {
+                    best = replayValues;
+                }
+
+                allScoresBag.Add(best);
                 Console.WriteLine("Done with " + replayPPValuesOnThisMap[0].MapName);
             });
 
@@ -224,7 +230,7 @@ namespace PerformanceCalculator.LocalScores
                 if (item.CategoryAttribs.TryGetValue("Aim", out _))
                 {
                     // Delta attributes
-                    cells.AddRange(new List<Cell>()
+                    cells.AddRange(new List<Cell>
                     {
                         new Cell($"{item.CategoryAttribs["Aim"]:F1}") { Align = Align.Right },
                         new Cell($"{item.CategoryAttribs["Tap"]:F1}") { Align = Align.Right },
@@ -234,7 +240,7 @@ namespace PerformanceCalculator.LocalScores
                 else
                 {
                     // Xexxar attributes
-                    cells.AddRange(new List<Cell>()
+                    cells.AddRange(new List<Cell>
                     {
                         new Cell($"{item.CategoryAttribs["Total Aim pp"]:F1}") { Align = Align.Right },
                         new Cell($"{item.CategoryAttribs["Total Tap pp"]:F1}") { Align = Align.Right },
