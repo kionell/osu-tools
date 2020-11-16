@@ -71,5 +71,5 @@ Add the `-u` option like that: `-u="-MyUserName-"`
 
 # Thanks
 - delta and xexxar & others for doing pp reworks
-- yukinon and Kionell for helping me test it
+- RainaFallenhaze, yukinon and Kionell for helping me test it
 
