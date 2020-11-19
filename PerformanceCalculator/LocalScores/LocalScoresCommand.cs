@@ -138,7 +138,7 @@ namespace PerformanceCalculator.LocalScores
                             {
                                 [HitResult.Good] = replayEntry.Count100,
                                 [HitResult.Great] = !NoChokes ? replayEntry.Count300
-                                    : difficultyAttributes.MaxCombo - replayEntry.Count100 - replayEntry.Count50,
+                                    : workingBeatmap.Beatmap.HitObjects.Count - replayEntry.Count100 - replayEntry.Count50,
                                 [HitResult.Meh] = replayEntry.Count50,
                                 [HitResult.Miss] = !NoChokes ? replayEntry.CountMiss : 0
                             },
