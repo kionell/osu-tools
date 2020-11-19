@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 using Alba.CsConsoleFormat;
 using JetBrains.Annotations;
 using McMaster.Extensions.CommandLineUtils;
+using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Legacy;
 using osu.Game.Rulesets;
+using osu.Game.Rulesets.Osu.Objects;
 using osu.Game.Rulesets.Osu.Difficulty;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Scoring;
@@ -126,12 +128,6 @@ namespace PerformanceCalculator.LocalScores
                         RulesetInfo rulesetInfo = LegacyHelper.GetRulesetFromLegacyID(0).RulesetInfo;
                         Ruleset ruleset = rulesetInfo.CreateInstance();
 
-                        // Convert + process beatmap
-                        var scoreMods = currentRuleset.ConvertFromLegacyMods((LegacyMods)replayEntry.Mods).ToArray();
-
-                        var difficultyCalculator = (OsuDifficultyCalculator)ruleset.CreateDifficultyCalculator(workingBeatmap);
-                        var difficultyAttributes = difficultyCalculator.Calculate(scoreMods);
-
                         ScoreInfo scoreInfo = new ScoreInfo
                         {
                             Statistics =
@@ -142,20 +138,21 @@ namespace PerformanceCalculator.LocalScores
                                 [HitResult.Meh] = replayEntry.Count50,
                                 [HitResult.Miss] = !NoChokes ? replayEntry.CountMiss : 0
                             },
-                            Mods = scoreMods,
-                            MaxCombo = !NoChokes ? replayEntry.Combo : difficultyAttributes.MaxCombo,
+                            Mods = currentRuleset.ConvertFromLegacyMods((LegacyMods)replayEntry.Mods).ToArray(),
+                            MaxCombo = replayEntry.Combo,
                             Ruleset = rulesetInfo,
                         };
 
                         var score = scoreParser.Parse(scoreInfo);
 
-                        var performanceCalculator = (OsuPerformanceCalculator)ruleset.CreatePerformanceCalculator(difficultyAttributes, score.ScoreInfo);
-                        // ReSharper disable once PossibleNullReferenceException
-                        scoreInfo.Combo = performanceCalculator.Attributes.MaxCombo;
-
+                        // Convert + process beatmap
                         var categoryAttribs = new Dictionary<string, double>();
+                        OsuPerformanceCalculator calculator = (OsuPerformanceCalculator)ruleset.CreatePerformanceCalculator(workingBeatmap, score.ScoreInfo);
+                        // ReSharper disable once PossibleNullReferenceException
+                        scoreInfo.Combo = calculator.Attributes.MaxCombo;
+                        scoreInfo.MaxCombo = !NoChokes ? scoreInfo.MaxCombo : scoreInfo.Combo;
 
-                        var pp = performanceCalculator.Calculate(categoryAttribs);
+                        var pp = calculator.Calculate(categoryAttribs);
                         replayPPValuesOnThisMap.Add(new ReplayPPValues(pp, categoryAttribs, score.ScoreInfo, beatmapName));
                     }
                     catch (Exception e)
