@@ -1,4 +1,4 @@
-﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -58,6 +58,9 @@ namespace PerformanceCalculator.LocalScores
 
         [Option(Description = "Only run on 20 beatmaps to test your arguments")]
         public bool TestRun { get; set; }
+
+        [Option(Description = "Remove chokes from scores")]
+        public bool NoChokes { get; set; }
 
         public override void Execute()
         {
@@ -123,28 +126,36 @@ namespace PerformanceCalculator.LocalScores
                         RulesetInfo rulesetInfo = LegacyHelper.GetRulesetFromLegacyID(0).RulesetInfo;
                         Ruleset ruleset = rulesetInfo.CreateInstance();
 
+                        // Convert + process beatmap
+                        var scoreMods = currentRuleset.ConvertFromLegacyMods((LegacyMods)replayEntry.Mods).ToArray();
+
+                        var difficultyCalculator = (OsuDifficultyCalculator)ruleset.CreateDifficultyCalculator(workingBeatmap);
+                        var difficultyAttributes = difficultyCalculator.Calculate(scoreMods);
+
                         ScoreInfo scoreInfo = new ScoreInfo
                         {
                             Statistics =
                             {
                                 [HitResult.Good] = replayEntry.Count100,
-                                [HitResult.Great] = replayEntry.Count300,
+                                [HitResult.Great] = !NoChokes ? replayEntry.Count300
+                                    : difficultyAttributes.MaxCombo - replayEntry.Count100 - replayEntry.Count50,
                                 [HitResult.Meh] = replayEntry.Count50,
-                                [HitResult.Miss] = replayEntry.CountMiss
+                                [HitResult.Miss] = !NoChokes ? replayEntry.CountMiss : 0
                             },
-                            Mods = currentRuleset.ConvertFromLegacyMods((LegacyMods)replayEntry.Mods).ToArray(),
-                            MaxCombo = replayEntry.Combo,
+                            Mods = scoreMods,
+                            MaxCombo = !NoChokes ? replayEntry.Combo : difficultyAttributes.MaxCombo,
                             Ruleset = rulesetInfo,
                         };
 
                         var score = scoreParser.Parse(scoreInfo);
 
-                        // Convert + process beatmap
-                        var categoryAttribs = new Dictionary<string, double>();
-                        OsuPerformanceCalculator calculator = (OsuPerformanceCalculator)ruleset.CreatePerformanceCalculator(workingBeatmap, score.ScoreInfo);
+                        var performanceCalculator = (OsuPerformanceCalculator)ruleset.CreatePerformanceCalculator(difficultyAttributes, score.ScoreInfo);
                         // ReSharper disable once PossibleNullReferenceException
-                        scoreInfo.Combo = calculator.Attributes.MaxCombo;
-                        var pp = calculator.Calculate(categoryAttribs);
+                        scoreInfo.Combo = performanceCalculator.Attributes.MaxCombo;
+
+                        var categoryAttribs = new Dictionary<string, double>();
+
+                        var pp = performanceCalculator.Calculate(categoryAttribs);
                         replayPPValuesOnThisMap.Add(new ReplayPPValues(pp, categoryAttribs, score.ScoreInfo, beatmapName));
                     }
                     catch (Exception e)
